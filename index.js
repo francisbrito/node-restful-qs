@@ -24,7 +24,7 @@ var DEFAULT_QUERY = {
   },
 };
 
-var BLACK_LISTED_QUERY_PARAMETERS = [
+var BLACK_LISTED_FILTERS = [
   'skip',
   'link',
   'page',
@@ -44,7 +44,7 @@ function parseQuery(qs) {
     parsePagination({ default: DEFAULT_QUERY.pagination }),
     parseQueryParamAsArray('embed'),
     parseQueryParamAsArray('link'),
-    parseFilter({ blackList: BLACK_LISTED_QUERY_PARAMETERS }),
+    parseFilter({ blackList: BLACK_LISTED_FILTERS }),
   ];
 
   assert(qs, '`qs` parameter is missing.');
