@@ -3,7 +3,7 @@ var test = require('tape');
 
 var parseQuery = require('./');
 
-test('it can parse `sort` query parameter', function (t) {
+test('it can parse `sort` query parameter.', function (t) {
   var queryString = 'sort=-foo,bar,-baz';
   var expectedSorting = {
     foo: 'descending',
@@ -75,6 +75,21 @@ test('it can parse `link` query parameter.', function (t) {
 
   t.ok(actualLink, 'parsed query should have `link` field.');
   t.deepEqual(actualLink, expectedLink, '`link` should equal expected linking.');
+
+  t.end();
+});
+
+test('it can parse all other query parameters as `filter`.', function (t) {
+  var queryString = 'name=sabrina&description=free+spirit&limit=10';
+  var expectedFilter = {
+    name: 'sabrina',
+    description: 'free spirit',
+  };
+  var subject = parseQuery(queryString);
+  var actualFilter = subject.filter;
+
+  t.ok(actualFilter, 'parsed query should have `filter` field.');
+  t.deepEqual(actualFilter, expectedFilter, '`filter` should equal expected filter.');
 
   t.end();
 });

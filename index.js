@@ -14,6 +14,17 @@ var DEFAULT_QUERY = {
   },
 };
 
+var BLACK_LISTED_QUERY_PARAMETERS = [
+  'skip',
+  'link',
+  'page',
+  'sort',
+  'embed',
+  'limit',
+  'fields',
+  'pagination',
+];
+
 function parseQuery(qs) {
   var rawQuery = assign({}, DEFAULT_QUERY, querystring.parse(qs));
   var parsedQuery;
@@ -23,6 +34,7 @@ function parseQuery(qs) {
     parsePaginationFrom,
     parseEmbeddingFrom,
     parseLinkFrom,
+    parseFilterFrom,
   ];
 
   rawQuery.pagination = assign({}, DEFAULT_QUERY.pagination, rawQuery.pagination);
@@ -86,6 +98,37 @@ function parseLinkFrom(q) {
 
   return {
     link: link,
+  };
+}
+
+function parseFilterFrom(q) {
+  return except(BLACK_LISTED_QUERY_PARAMETERS, q);
+}
+
+function except(blackListedKeys, q) {
+  var keys = Object.keys(q);
+  var keysWithoutBlacklisted = keys.filter(not(isInList(blackListedKeys)));
+  var queryWithoutBlacklisted = keysWithoutBlacklisted.reduce(function (result, k) {
+    var query = {};
+    query[k] = q[k];
+
+    return assign({}, result, query);
+  }, {});
+
+  return { filter: queryWithoutBlacklisted };
+}
+
+function not(fn) {
+  return function () {
+    return !fn.apply(null, arguments);
+  };
+}
+
+function isInList(list) {
+  return function (item) {
+    return !!list.filter(function (li) {
+      return li === item;
+    })[0];
   };
 }
 
