@@ -64,3 +64,17 @@ test('it can parse `embed` query parameter.', function (t) {
 
   t.end();
 });
+
+test('it can parse `link` query parameter.', function (t) {
+  var queryString = 'link=foo,bar,baz';
+  var expectedLink = [
+    'foo', 'bar', 'baz',
+  ];
+  var subject = parseQuery(queryString);
+  var actualLink = subject.link;
+
+  t.ok(actualLink, 'parsed query should have `link` field.');
+  t.deepEqual(actualLink, expectedLink, '`link` should equal expected linking.');
+
+  t.end();
+});

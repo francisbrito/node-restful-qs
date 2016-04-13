@@ -3,6 +3,7 @@ var assign = require('object-assign');
 var querystring = require('querystring');
 
 var DEFAULT_QUERY = {
+  link: '',
   sort: '',
   embed: '',
   fields: '',
@@ -16,15 +17,17 @@ var DEFAULT_QUERY = {
 function parseQuery(qs) {
   var rawQuery = assign({}, DEFAULT_QUERY, querystring.parse(qs));
   var parsedQuery;
-
-  rawQuery.pagination = assign({}, DEFAULT_QUERY.pagination, rawQuery.pagination);
-
-  parsedQuery = [
+  var transformations = [
     parseSortingFrom,
     parseFieldsFrom,
     parsePaginationFrom,
     parseEmbeddingFrom,
-  ]
+    parseLinkFrom,
+  ];
+
+  rawQuery.pagination = assign({}, DEFAULT_QUERY.pagination, rawQuery.pagination);
+
+  parsedQuery = transformations
   .map(function (transform) { return transform(rawQuery); })
   .reduce(function (query, field) { return assign({}, query, field); }, {});
 
@@ -75,6 +78,14 @@ function parseEmbeddingFrom(q) {
 
   return {
     embed: embed,
+  };
+}
+
+function parseLinkFrom(q) {
+  var link = q.link.split(',');
+
+  return {
+    link: link,
   };
 }
 
