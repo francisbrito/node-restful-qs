@@ -8,9 +8,9 @@ var chain = require('./lib/helpers/chain');
 var isEitherStringOrObject = require('./lib/helpers/is-either-string-or-object');
 
 var parseFilter = require('./lib/parsers/filter');
+var parseAsArray = require('./lib/parsers/as-array');
 var parsePagination = require('./lib/parsers/pagination');
 var parseSortingFrom = require('./lib/parsers/sorting');
-var parseQueryParamAsArray = require('./lib/parsers/as-array');
 
 var DEFAULT_QUERY = {
   link: '',
@@ -38,14 +38,7 @@ var BLACK_LISTED_FILTERS = [
 function parseQuery(qs) {
   var rawQuery;
   var parsedQuery;
-  var transformations = [
-    chain(parseQueryParamAsArray('sort'), parseSortingFrom),
-    parseQueryParamAsArray('fields'),
-    parsePagination({ default: DEFAULT_QUERY.pagination }),
-    parseQueryParamAsArray('embed'),
-    parseQueryParamAsArray('link'),
-    parseFilter({ blackList: BLACK_LISTED_FILTERS }),
-  ];
+  var transformations;
 
   assert(qs, '`qs` parameter is missing.');
   assert(isEitherStringOrObject(qs), '`qs` parameter must be either a string or an object.');
@@ -54,6 +47,15 @@ function parseQuery(qs) {
 
   rawQuery = assign({}, DEFAULT_QUERY, qs);
   rawQuery.pagination = assign({}, DEFAULT_QUERY.pagination, rawQuery.pagination);
+
+  transformations = [
+    chain(parseAsArray('sort'), parseSortingFrom),
+    parseAsArray('fields'),
+    parsePagination({ default: DEFAULT_QUERY.pagination }),
+    parseAsArray('embed'),
+    parseAsArray('link'),
+    parseFilter({ blackList: BLACK_LISTED_FILTERS }),
+  ];
 
   parsedQuery = transformations
   .map(function (transform) { return transform(rawQuery); })
