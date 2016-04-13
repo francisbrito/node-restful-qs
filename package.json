@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/francisbrito/node-restful-qs/issues"
   },
-  "homepage": "https://github.com/francisbrito/node-restful-qs#readme"
+  "homepage": "https://github.com/francisbrito/node-restful-qs#readme",
+  "devDependencies": {
+    "tape": "^4.5.1"
+  }
 }
