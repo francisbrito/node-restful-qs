@@ -65,7 +65,7 @@ function parsePaginationFrom(q) {
   var page = parseInt(q.page, 10) || DEFAULT_QUERY.pagination.page;
   var limit = parseInt(q.limit, 10) || DEFAULT_QUERY.pagination.limit;
 
-  return { pagination: { skip, page, limit } };
+  return { pagination: { skip: skip, page: page, limit: limit } };
 }
 
 module.exports = parseQuery;
