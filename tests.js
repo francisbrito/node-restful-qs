@@ -93,3 +93,42 @@ test('it can parse all other query parameters as `filter`.', function (t) {
 
   t.end();
 });
+
+test('it can parse an object.', function (t) {
+  var q = {
+    age: '29',
+    name: 'sabrina',
+    link: 'foo',
+    page: '0',
+    skip: '0',
+    sort: '-foo,bar,-baz',
+    embed: 'foo',
+    limit: '0',
+    fields: 'foo,bar,baz',
+  };
+  var expectedQuery = {
+    link: ['foo'],
+    sort: {
+      foo: 'descending',
+      bar: 'ascending',
+      baz: 'descending',
+    },
+    embed: ['foo'],
+    fields: ['foo', 'bar', 'baz'],
+    filter: {
+      age: '29',
+      name: 'sabrina',
+    },
+    pagination: {
+      page: 0,
+      skip: 0,
+      limit: 0,
+    },
+  };
+  var actualQuery = parseQuery(q);
+
+  t.ok(actualQuery, 'should be able to parse object query.');
+  t.deepEqual(actualQuery, expectedQuery, 'object query should equal expected query.');
+
+  t.end();
+});

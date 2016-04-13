@@ -26,7 +26,7 @@ var BLACK_LISTED_QUERY_PARAMETERS = [
 ];
 
 function parseQuery(qs) {
-  var rawQuery = assign({}, DEFAULT_QUERY, querystring.parse(qs));
+  var rawQuery;
   var parsedQuery;
   var transformations = [
     parseSortingFrom,
@@ -37,6 +37,9 @@ function parseQuery(qs) {
     parseFilterFrom,
   ];
 
+  qs = typeof qs === 'string' ? querystring.parse(qs) : qs;
+
+  rawQuery = assign({}, DEFAULT_QUERY, qs);
   rawQuery.pagination = assign({}, DEFAULT_QUERY.pagination, rawQuery.pagination);
 
   parsedQuery = transformations
@@ -78,9 +81,13 @@ function parseFieldsFrom(q) {
 }
 
 function parsePaginationFrom(q) {
-  var skip = parseInt(q.skip, 10) || DEFAULT_QUERY.pagination.skip;
-  var page = parseInt(q.page, 10) || DEFAULT_QUERY.pagination.page;
-  var limit = parseInt(q.limit, 10) || DEFAULT_QUERY.pagination.limit;
+  var parsedSkip = parseInt(q.skip, 10);
+  var parsedPage = parseInt(q.page, 10);
+  var parsedLimit = parseInt(q.limit, 10);
+
+  var skip = isNaN(parsedSkip) ? DEFAULT_QUERY.pagination.skip : parsedSkip;
+  var page = isNaN(parsedPage) ? DEFAULT_QUERY.pagination.page : parsedPage;
+  var limit = isNaN(parsedLimit) ? DEFAULT_QUERY.pagination.limit : parsedLimit;
 
   return { pagination: { skip: skip, page: page, limit: limit } };
 }
