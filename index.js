@@ -20,8 +20,8 @@ function parseQuery(qs) {
     parseFieldsFrom,
     parsePaginationFrom,
   ]
-  .map(transform => transform(rawQuery))
-  .reduce((query, field) => Object.assign({}, query, field), {});
+  .map(function (transform) { return transform(rawQuery); })
+  .reduce(function (query, field) { return Object.assign({}, query, field); }, {});
 
   return parsedQuery;
 }
@@ -29,14 +29,14 @@ function parseQuery(qs) {
 function parseSortingFrom(q) {
   const sortFields = q.sort.split(',');
   const sort = sortFields.map(
-    sf => {
+    function (sf) {
       const sortFieldName = getFieldName(sf);
       const sortFieldDirection = getSortDirection(sf);
 
       return { [sortFieldName]: sortFieldDirection };
     }
   )
-  .reduce((query, f) => Object.assign({}, query, f), {});
+  .reduce(function (query, f) { return Object.assign({}, query, f); }, {});
 
   return { sort };
 }

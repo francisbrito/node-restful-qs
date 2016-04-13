@@ -1,17 +1,17 @@
 'use strict';
-const test = require('tape');
+var test = require('tape');
 
-const parseQuery = require('./');
+var parseQuery = require('./');
 
-test('it can parse `sort` query parameter', t => {
-  const queryString = 'sort=-foo,bar,-baz';
-  const expectedSorting = {
+test('it can parse `sort` query parameter', function (t) {
+  var queryString = 'sort=-foo,bar,-baz';
+  var expectedSorting = {
     foo: 'descending',
     bar: 'ascending',
     baz: 'descending',
   };
-  const subject = parseQuery(queryString);
-  const actualSorting = subject.sort;
+  var subject = parseQuery(queryString);
+  var actualSorting = subject.sort;
 
   t.ok(actualSorting, 'parsed query should have `sort` field.');
   t.deepEqual(actualSorting, expectedSorting, '`sort` should equal expected sorting.');
@@ -19,13 +19,13 @@ test('it can parse `sort` query parameter', t => {
   t.end();
 });
 
-test('it can parse `fields` query parameter.', t => {
-  const queryString = 'fields=foo,bar,baz';
-  const expectedFields = [
+test('it can parse `fields` query parameter.', function (t) {
+  var queryString = 'fields=foo,bar,baz';
+  var expectedFields = [
     'foo', 'bar', 'baz',
   ];
-  const subject = parseQuery(queryString);
-  const actualFields = subject.fields;
+  var subject = parseQuery(queryString);
+  var actualFields = subject.fields;
 
   t.ok(actualFields, 'parsed query should have `fields` field.');
   t.deepEqual(actualFields, expectedFields, '`fields` should equal expected projection.');
@@ -33,15 +33,15 @@ test('it can parse `fields` query parameter.', t => {
   t.end();
 });
 
-test('it can parse `pagination` query parameters.', t => {
-  const queryString = 'skip=1&page=2&limit=3';
-  const expectedPagination = {
+test('it can parse `pagination` query parameters.', function (t) {
+  var queryString = 'skip=1&page=2&limit=3';
+  var expectedPagination = {
     skip: 1,
     page: 2,
     limit: 3,
   };
-  const subject = parseQuery(queryString);
-  const actualPagination = subject.pagination;
+  var subject = parseQuery(queryString);
+  var actualPagination = subject.pagination;
 
   t.ok(actualPagination, 'parsed query should have `pagination` field.');
   t.deepEqual(
