@@ -32,10 +32,10 @@ function parseQuery(qs) {
   var parsedQuery;
   var transformations = [
     parseSortingFrom,
-    parseFieldsFrom,
+    parseQueryParamAsArray('fields'),
     parsePaginationFrom,
-    parseEmbeddingFrom,
-    parseLinkFrom,
+    parseQueryParamAsArray('embed'),
+    parseQueryParamAsArray('link'),
     parseFilterFrom,
   ];
 
@@ -79,10 +79,13 @@ function getSortDirection(sf) {
   return sf[0] === '-' ? 'descending' : 'ascending';
 }
 
-function parseFieldsFrom(q) {
-  var fields = q.fields.split(',');
+function parseQueryParamAsArray(p) {
+  return function parseQueryParameter(q) {
+    var query = {};
+    query[p] = q[p].split(',');
 
-  return { fields: fields };
+    return query;
+  };
 }
 
 function parsePaginationFrom(q) {
@@ -95,22 +98,6 @@ function parsePaginationFrom(q) {
   var limit = isNaN(parsedLimit) ? DEFAULT_QUERY.pagination.limit : parsedLimit;
 
   return { pagination: { skip: skip, page: page, limit: limit } };
-}
-
-function parseEmbeddingFrom(q) {
-  var embed = q.embed.split(',');
-
-  return {
-    embed: embed,
-  };
-}
-
-function parseLinkFrom(q) {
-  var link = q.link.split(',');
-
-  return {
-    link: link,
-  };
 }
 
 function parseFilterFrom(q) {
