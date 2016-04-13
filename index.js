@@ -4,6 +4,10 @@ var querystring = require('querystring');
 
 var assign = require('object-assign');
 
+var chain = require('./lib/helpers/chain');
+var except = require('./lib/helpers/except');
+var isEitherStringOrObject = require('./lib/helpers/is-either-string-or-object');
+
 var DEFAULT_QUERY = {
   link: '',
   sort: '',
@@ -101,43 +105,6 @@ function parsePaginationFrom(q) {
 
 function parseFilterFrom(q) {
   return except(BLACK_LISTED_QUERY_PARAMETERS, q);
-}
-
-function except(blackListedKeys, q) {
-  var keys = Object.keys(q);
-  var keysWithoutBlacklisted = keys.filter(not(isInList(blackListedKeys)));
-  var queryWithoutBlacklisted = keysWithoutBlacklisted.reduce(function (result, k) {
-    var query = {};
-    query[k] = q[k];
-
-    return assign({}, result, query);
-  }, {});
-
-  return { filter: queryWithoutBlacklisted };
-}
-
-function not(fn) {
-  return function () {
-    return !fn.apply(null, arguments);
-  };
-}
-
-function isInList(list) {
-  return function (item) {
-    return !!list.filter(function (li) {
-      return li === item;
-    })[0];
-  };
-}
-
-function isEitherStringOrObject(qs) {
-  return typeof qs === 'string' || typeof qs === 'object';
-}
-
-function chain(fn1, fn2) {
-  return function () {
-    return fn2(fn1.apply(null, arguments));
-  };
 }
 
 module.exports = parseQuery;
