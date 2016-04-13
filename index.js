@@ -5,8 +5,12 @@ var querystring = require('querystring');
 var assign = require('object-assign');
 
 var chain = require('./lib/helpers/chain');
-var except = require('./lib/helpers/except');
 var isEitherStringOrObject = require('./lib/helpers/is-either-string-or-object');
+
+var parseFilter = require('./lib/parsers/filter');
+var parsePagination = require('./lib/parsers/pagination');
+var parseSortingFrom = require('./lib/parsers/sorting');
+var parseQueryParamAsArray = require('./lib/parsers/as-array');
 
 var DEFAULT_QUERY = {
   link: '',
@@ -37,10 +41,10 @@ function parseQuery(qs) {
   var transformations = [
     chain(parseQueryParamAsArray('sort'), parseSortingFrom),
     parseQueryParamAsArray('fields'),
-    parsePaginationFrom,
+    parsePagination({ default: DEFAULT_QUERY.pagination }),
     parseQueryParamAsArray('embed'),
     parseQueryParamAsArray('link'),
-    parseFilterFrom,
+    parseFilter({ blackList: BLACK_LISTED_QUERY_PARAMETERS }),
   ];
 
   assert(qs, '`qs` parameter is missing.');
@@ -56,55 +60,6 @@ function parseQuery(qs) {
   .reduce(function (query, field) { return assign({}, query, field); }, {});
 
   return parsedQuery;
-}
-
-function parseSortingFrom(q) {
-  var sort = q.sort.map(
-    function (sf) {
-      var sortFieldName = getFieldName(sf);
-      var sortFieldDirection = getSortDirection(sf);
-      var sorting = {};
-      sorting[sortFieldName] = sortFieldDirection;
-
-      return sorting;
-    }
-  )
-  .reduce(function (query, f) { return assign({}, query, f); }, {});
-
-  return { sort: sort };
-}
-
-function getFieldName(sf) {
-  return sf[0] === '-' ? sf.slice(1) : sf;
-}
-
-function getSortDirection(sf) {
-  return sf[0] === '-' ? 'descending' : 'ascending';
-}
-
-function parseQueryParamAsArray(p) {
-  return function parseQueryParameter(q) {
-    var query = {};
-    query[p] = q[p].split(',');
-
-    return query;
-  };
-}
-
-function parsePaginationFrom(q) {
-  var parsedSkip = parseInt(q.skip, 10);
-  var parsedPage = parseInt(q.page, 10);
-  var parsedLimit = parseInt(q.limit, 10);
-
-  var skip = isNaN(parsedSkip) ? DEFAULT_QUERY.pagination.skip : parsedSkip;
-  var page = isNaN(parsedPage) ? DEFAULT_QUERY.pagination.page : parsedPage;
-  var limit = isNaN(parsedLimit) ? DEFAULT_QUERY.pagination.limit : parsedLimit;
-
-  return { pagination: { skip: skip, page: page, limit: limit } };
-}
-
-function parseFilterFrom(q) {
-  return except(BLACK_LISTED_QUERY_PARAMETERS, q);
 }
 
 module.exports = parseQuery;
