@@ -27,5 +27,8 @@
   "homepage": "https://github.com/francisbrito/node-restful-qs#readme",
   "devDependencies": {
     "tape": "^4.5.1"
+  },
+  "dependencies": {
+    "object-assign": "^4.0.1"
   }
 }
