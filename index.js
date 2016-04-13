@@ -1,7 +1,7 @@
 'use strict';
-const querystring = require('querystring');
+var querystring = require('querystring');
 
-const DEFAULT_QUERY = {
+var DEFAULT_QUERY = {
   sort: '',
   fields: '',
   pagination: {
@@ -12,10 +12,12 @@ const DEFAULT_QUERY = {
 };
 
 function parseQuery(qs) {
-  const rawQuery = Object.assign({}, DEFAULT_QUERY, querystring.parse(qs));
+  var rawQuery = Object.assign({}, DEFAULT_QUERY, querystring.parse(qs));
+  var parsedQuery;
+
   rawQuery.pagination = Object.assign({}, DEFAULT_QUERY.pagination, rawQuery.pagination);
 
-  const parsedQuery = [
+  parsedQuery = [
     parseSortingFrom,
     parseFieldsFrom,
     parsePaginationFrom,
@@ -27,11 +29,11 @@ function parseQuery(qs) {
 }
 
 function parseSortingFrom(q) {
-  const sortFields = q.sort.split(',');
-  const sort = sortFields.map(
+  var sortFields = q.sort.split(',');
+  var sort = sortFields.map(
     function (sf) {
-      const sortFieldName = getFieldName(sf);
-      const sortFieldDirection = getSortDirection(sf);
+      var sortFieldName = getFieldName(sf);
+      var sortFieldDirection = getSortDirection(sf);
 
       return { [sortFieldName]: sortFieldDirection };
     }
@@ -50,15 +52,15 @@ function getSortDirection(sf) {
 }
 
 function parseFieldsFrom(q) {
-  const fields = q.fields.split(',');
+  var fields = q.fields.split(',');
 
   return { fields };
 }
 
 function parsePaginationFrom(q) {
-  const skip = parseInt(q.skip, 10) || DEFAULT_QUERY.pagination.skip;
-  const page = parseInt(q.page, 10) || DEFAULT_QUERY.pagination.page;
-  const limit = parseInt(q.limit, 10) || DEFAULT_QUERY.pagination.limit;
+  var skip = parseInt(q.skip, 10) || DEFAULT_QUERY.pagination.skip;
+  var page = parseInt(q.page, 10) || DEFAULT_QUERY.pagination.page;
+  var limit = parseInt(q.limit, 10) || DEFAULT_QUERY.pagination.limit;
 
   return { pagination: { skip, page, limit } };
 }
