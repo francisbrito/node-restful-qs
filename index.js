@@ -31,7 +31,7 @@ function parseQuery(qs) {
   var rawQuery;
   var parsedQuery;
   var transformations = [
-    parseSortingFrom,
+    chain(parseQueryParamAsArray('sort'), transformToSorting),
     parseQueryParamAsArray('fields'),
     parsePaginationFrom,
     parseQueryParamAsArray('embed'),
@@ -54,9 +54,8 @@ function parseQuery(qs) {
   return parsedQuery;
 }
 
-function parseSortingFrom(q) {
-  var sortFields = q.sort.split(',');
-  var sort = sortFields.map(
+function transformToSorting(q) {
+  var sort = q.sort.map(
     function (sf) {
       var sortFieldName = getFieldName(sf);
       var sortFieldDirection = getSortDirection(sf);
@@ -133,6 +132,12 @@ function isInList(list) {
 
 function isEitherStringOrObject(qs) {
   return typeof qs === 'string' || typeof qs === 'object';
+}
+
+function chain(fn1, fn2) {
+  return function () {
+    return fn2(fn1.apply(null, arguments));
+  };
 }
 
 module.exports = parseQuery;
