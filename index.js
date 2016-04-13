@@ -1,8 +1,12 @@
 'use strict';
 const querystring = require('querystring');
 
+const DEFAULT_QUERY = {
+  sort: '',
+};
+
 function parseQuery(qs) {
-  const rawQuery = querystring.parse(qs);
+  const rawQuery = Object.assign({}, DEFAULT_QUERY, querystring.parse(qs));
   const parsedQuery = parseSortingFrom(rawQuery);
 
   return parsedQuery;
