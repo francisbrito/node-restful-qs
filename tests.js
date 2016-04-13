@@ -50,3 +50,17 @@ test('it can parse `pagination` query parameters.', function (t) {
 
   t.end();
 });
+
+test('it can parse `embed` query parameter.', function (t) {
+  var queryString = 'embed=foo,bar,baz';
+  var expectedEmbed = [
+    'foo', 'bar', 'baz',
+  ];
+  var subject = parseQuery(queryString);
+  var actualEmbed = subject.embed;
+
+  t.ok(actualEmbed, 'parsed query should have `embed` field.');
+  t.deepEqual(actualEmbed, expectedEmbed, '`embed` should equal expected embedding.');
+
+  t.end();
+});

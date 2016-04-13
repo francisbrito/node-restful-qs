@@ -4,6 +4,7 @@ var querystring = require('querystring');
 
 var DEFAULT_QUERY = {
   sort: '',
+  embed: '',
   fields: '',
   pagination: {
     skip: 0,
@@ -22,6 +23,7 @@ function parseQuery(qs) {
     parseSortingFrom,
     parseFieldsFrom,
     parsePaginationFrom,
+    parseEmbeddingFrom,
   ]
   .map(function (transform) { return transform(rawQuery); })
   .reduce(function (query, field) { return assign({}, query, field); }, {});
@@ -66,6 +68,14 @@ function parsePaginationFrom(q) {
   var limit = parseInt(q.limit, 10) || DEFAULT_QUERY.pagination.limit;
 
   return { pagination: { skip: skip, page: page, limit: limit } };
+}
+
+function parseEmbeddingFrom(q) {
+  var embed = q.embed.split(',');
+
+  return {
+    embed: embed,
+  };
 }
 
 module.exports = parseQuery;
