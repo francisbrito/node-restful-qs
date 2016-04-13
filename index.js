@@ -43,7 +43,7 @@ function parseSortingFrom(q) {
   )
   .reduce(function (query, f) { return assign({}, query, f); }, {});
 
-  return { sort };
+  return { sort: sort };
 }
 
 function getFieldName(sf) {
@@ -57,7 +57,7 @@ function getSortDirection(sf) {
 function parseFieldsFrom(q) {
   var fields = q.fields.split(',');
 
-  return { fields };
+  return { fields: fields };
 }
 
 function parsePaginationFrom(q) {
