@@ -1,0 +1,28 @@
+{
+  "name": "restful-qs",
+  "version": "0.0.1",
+  "description": "Parse querystrings into queries for your RESTful services.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/francisbrito/node-restful-qs.git"
+  },
+  "keywords": [
+    "restful",
+    "qs",
+    "querystring",
+    "parse",
+    "queries",
+    "query",
+    "services"
+  ],
+  "author": "Francis Brito <fr.br94@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/francisbrito/node-restful-qs/issues"
+  },
+  "homepage": "https://github.com/francisbrito/node-restful-qs#readme"
+}
