@@ -1,4 +1,5 @@
 'use strict';
+var assign = require('object-assign');
 var querystring = require('querystring');
 
 var DEFAULT_QUERY = {
@@ -12,10 +13,10 @@ var DEFAULT_QUERY = {
 };
 
 function parseQuery(qs) {
-  var rawQuery = Object.assign({}, DEFAULT_QUERY, querystring.parse(qs));
+  var rawQuery = assign({}, DEFAULT_QUERY, querystring.parse(qs));
   var parsedQuery;
 
-  rawQuery.pagination = Object.assign({}, DEFAULT_QUERY.pagination, rawQuery.pagination);
+  rawQuery.pagination = assign({}, DEFAULT_QUERY.pagination, rawQuery.pagination);
 
   parsedQuery = [
     parseSortingFrom,
@@ -23,7 +24,7 @@ function parseQuery(qs) {
     parsePaginationFrom,
   ]
   .map(function (transform) { return transform(rawQuery); })
-  .reduce(function (query, field) { return Object.assign({}, query, field); }, {});
+  .reduce(function (query, field) { return assign({}, query, field); }, {});
 
   return parsedQuery;
 }
@@ -38,7 +39,7 @@ function parseSortingFrom(q) {
       return { [sortFieldName]: sortFieldDirection };
     }
   )
-  .reduce(function (query, f) { return Object.assign({}, query, f); }, {});
+  .reduce(function (query, f) { return assign({}, query, f); }, {});
 
   return { sort };
 }
