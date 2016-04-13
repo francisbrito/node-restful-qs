@@ -35,7 +35,7 @@ function parseQuery(qs) {
   var rawQuery;
   var parsedQuery;
   var transformations = [
-    chain(parseQueryParamAsArray('sort'), transformToSorting),
+    chain(parseQueryParamAsArray('sort'), parseSortingFrom),
     parseQueryParamAsArray('fields'),
     parsePaginationFrom,
     parseQueryParamAsArray('embed'),
@@ -58,7 +58,7 @@ function parseQuery(qs) {
   return parsedQuery;
 }
 
-function transformToSorting(q) {
+function parseSortingFrom(q) {
   var sort = q.sort.map(
     function (sf) {
       var sortFieldName = getFieldName(sf);
