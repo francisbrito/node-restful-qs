@@ -35,8 +35,10 @@ function parseSortingFrom(q) {
     function (sf) {
       var sortFieldName = getFieldName(sf);
       var sortFieldDirection = getSortDirection(sf);
+      var sorting = {};
+      sorting[sortFieldName] = sortFieldDirection;
 
-      return { [sortFieldName]: sortFieldDirection };
+      return sorting;
     }
   )
   .reduce(function (query, f) { return assign({}, query, f); }, {});
