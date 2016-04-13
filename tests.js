@@ -32,3 +32,21 @@ test('it can parse `fields` query parameter.', t => {
 
   t.end();
 });
+
+test('it can parse `pagination` query parameters.', t => {
+  const queryString = 'skip=1&page=2&limit=3';
+  const expectedPagination = {
+    skip: 1,
+    page: 2,
+    limit: 3,
+  };
+  const subject = parseQuery(queryString);
+  const actualPagination = subject.pagination;
+
+  t.ok(actualPagination, 'parsed query should have `pagination` field.');
+  t.deepEqual(
+    actualPagination, expectedPagination, '`pagination` should equal expected pagination.'
+  );
+
+  t.end();
+});
