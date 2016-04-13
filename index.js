@@ -1,6 +1,8 @@
 'use strict';
-var assign = require('object-assign');
+var assert = require('assert');
 var querystring = require('querystring');
+
+var assign = require('object-assign');
 
 var DEFAULT_QUERY = {
   link: '',
@@ -36,6 +38,9 @@ function parseQuery(qs) {
     parseLinkFrom,
     parseFilterFrom,
   ];
+
+  assert(qs, '`qs` parameter is missing.');
+  assert(isEitherStringOrObject(qs), '`qs` parameter must be either a string or an object.');
 
   qs = typeof qs === 'string' ? querystring.parse(qs) : qs;
 
@@ -137,6 +142,10 @@ function isInList(list) {
       return li === item;
     })[0];
   };
+}
+
+function isEitherStringOrObject(qs) {
+  return typeof qs === 'string' || typeof qs === 'object';
 }
 
 module.exports = parseQuery;

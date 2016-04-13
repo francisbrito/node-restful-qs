@@ -132,3 +132,19 @@ test('it can parse an object.', function (t) {
 
   t.end();
 });
+
+test('it throws if neither an object or a string is provided.', function (t) {
+  t.throws(
+    parseQuery, /`qs` parameter is missing/, 'it should throw if `qs` parameter is missing.'
+  );
+
+  t.throws(
+    function () {
+      parseQuery(42);
+    },
+    /`qs` parameter must be either a string or an object/,
+    'it should throw if `qs` parameter is not a string or object.'
+  );
+
+  t.end();
+});
