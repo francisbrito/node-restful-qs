@@ -45,4 +45,9 @@ console.log('listening at http://localhost:3000/');
 ## API
 
 ### `parseRESTfulQuery(qs)`
-> Parses a string or object into a RESTful query.
+Parses a string or object into a RESTful query.
+
+#### `qs`
+Type: `String|Object`
+
+Query to parse into a RESTful query.
